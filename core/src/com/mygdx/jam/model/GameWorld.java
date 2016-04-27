@@ -141,6 +141,8 @@ public class GameWorld implements ContactListener {
                 entityManager.removeEntity(entity);
             }
 
+            coins = 0;
+
         }
     }
 
