@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -19,9 +20,11 @@ import com.mygdx.jam.model.PhysicsObject;
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
  */
 public class Bullet extends Entity implements PhysicsObject {
+    public ParticleEffect effect;
+
     public enum BulletType {PLAYER, ENEMY}
     // Physics
-    private Body body;
+    public Body body;
     private boolean flagForDelete = false;
 
     private Vector2 direction = new Vector2();
@@ -30,7 +33,7 @@ public class Bullet extends Entity implements PhysicsObject {
 
     private Sprite sprite;
 
-    private float alive;
+    public float alive;
     private GameWorld gameWorld;
     public BulletType type = BulletType.PLAYER;
     public Color tint = new Color();
@@ -59,7 +62,7 @@ public class Bullet extends Entity implements PhysicsObject {
         body.setActive(true);
         body.setTransform(x, y, 0);
         body.setLinearVelocity(vx, vy);
-        alive = 0;
+        alive = .5f;
         sprite.setSize(bounds.width, bounds.height);
 
     }
@@ -69,6 +72,9 @@ public class Bullet extends Entity implements PhysicsObject {
         sprite.setColor(tint);
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         sprite.draw(batch);
+        if (effect != null) {
+            effect.draw(batch);
+        }
     }
 
     @Override
@@ -76,9 +82,14 @@ public class Bullet extends Entity implements PhysicsObject {
         position.set(body.getPosition()).scl(Box2DWorld.BOX_TO_WORLD);
 
         velocity.set(direction).nor().scl(SPEED);
-        alive += delta;
+        alive -= delta;
 
-        if (alive > .5f) {
+        if (effect != null) {
+            effect.setPosition(position.x, position.y);
+            effect.update(delta);
+        }
+
+        if (alive <= 0) {
             gameWorld.getEntityManager().removeEntity(this);
         }
     }
