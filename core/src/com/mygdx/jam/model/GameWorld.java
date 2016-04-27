@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.jam.G;
 import com.mygdx.jam.controllers.PlayerController;
 import com.mygdx.jam.entities.Player;
+import com.mygdx.jam.entities.Wall;
 import com.mygdx.jam.utils.Constants;
 
 public class GameWorld implements ContactListener {
@@ -37,10 +38,16 @@ public class GameWorld implements ContactListener {
 
 
     public void initializeObjects() {
+        // Player
         Player player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
         entityManager.addEntity(player);
-
         Gdx.input.setInputProcessor(new PlayerController(player));
+
+
+        // Walls
+        new Wall(0, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
+        new Wall(G.TARGET_WIDTH, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
+        new Wall(G.TARGET_WIDTH / 2, 0, G.TARGET_WIDTH, 20, this);
     }
 
     public void update(float delta) {
