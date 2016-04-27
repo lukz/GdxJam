@@ -3,6 +3,7 @@ package com.mygdx.jam.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -33,6 +34,7 @@ public class Bullet extends Entity implements PhysicsObject {
     private GameWorld gameWorld;
     public BulletType type = BulletType.PLAYER;
     public Color tint = new Color();
+    public float damage = 0;
 
     public Bullet () {
         super(-1000, 0, 32, 32);
@@ -92,7 +94,24 @@ public class Bullet extends Entity implements PhysicsObject {
 
     @Override
     public void handleBeginContact(PhysicsObject psycho2, GameWorld world) {
-
+        if (psycho2 instanceof Bullet) {
+            Bullet other = (Bullet)psycho2;
+            if (type == BulletType.PLAYER && other.type == BulletType.ENEMY) {
+                gameWorld.getEntityManager().removeEntity(other);
+            }
+        } else if (psycho2 instanceof Player) {
+            Player player = (Player)psycho2;
+            if (type == BulletType.ENEMY) {
+                player.hp -= damage;
+            }
+            gameWorld.getEntityManager().removeEntity(this);
+        } else if (psycho2 instanceof Enemy) {
+            Enemy enemy = (Enemy)psycho2;
+            if (type == BulletType.PLAYER) {
+                enemy.health -= damage;
+                gameWorld.getEntityManager().removeEntity(this);
+            }
+        }
     }
 
     @Override

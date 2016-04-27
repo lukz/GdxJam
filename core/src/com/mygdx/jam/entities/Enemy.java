@@ -29,7 +29,7 @@ public class Enemy extends Entity implements PhysicsObject {
     private float SPEED = 5;
 
     private Sprite sprite;
-    public int fire;
+    public float health = 10;
     private GameWorld gameWorld;
 
     public Enemy (float x, float y, float radius, GameWorld gameWorld) {
@@ -69,14 +69,19 @@ public class Enemy extends Entity implements PhysicsObject {
         velocity.set(direction).nor().scl(SPEED);
 
         body.setLinearVelocity(velocity.x, velocity.y);
-        fireDelay -= delta;
-        if (fireDelay <= 0) {
-            fireDelay = 1.5f;
-            Bullet bullet = new Bullet();
-            bullet.setBounds(24, 24);
-            bullet.type = Bullet.BulletType.ENEMY;
-            bullet.tint.set(Color.GREEN);
-            bullet.init(pos.x, pos.y - .75f, 0, -16, gameWorld);
+        if (health <= 0 ) {
+            gameWorld.getEntityManager().removeEntity(this);
+        } else {
+            fireDelay -= delta;
+            if (fireDelay <= 0) {
+                fireDelay = 1.5f;
+                Bullet bullet = new Bullet();
+                bullet.setBounds(24, 24);
+                bullet.type = Bullet.BulletType.ENEMY;
+                bullet.tint.set(Color.GREEN);
+                bullet.damage = 0.1f;
+                bullet.init(pos.x, pos.y - .75f, 0, -16, gameWorld);
+            }
         }
     }
 

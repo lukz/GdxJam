@@ -88,6 +88,7 @@ public class Player extends Entity implements PhysicsObject {
             bullet.setBounds(48, 48);
             bullet.type = Bullet.BulletType.PLAYER;
             bullet.tint.set(Color.ORANGE);
+            bullet.damage = 10f;
             bullet.init(pos.x, pos.y + .75f, 0, 16, gameWorld);
         }
     }
