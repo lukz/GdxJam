@@ -1,12 +1,14 @@
 package com.mygdx.jam.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -14,6 +16,7 @@ import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
+import com.mygdx.jam.utils.Assets;
 
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
@@ -39,9 +42,17 @@ public class Player extends Entity implements PhysicsObject {
     public float hp = 1;
     private Color hpColor = new Color();
 
+    private Sound flameThrow;
+    private long flameThrowId;
+    private float flameThrowVol = 0;
+
     public Player(float x, float y, float radius, GameWorld gameWorld) {
         super(x, y, radius * 2, radius * 2);
         this.gameWorld = gameWorld;
+
+        flameThrow = G.assets.get(Assets.Sounds.FlameThrow, Sound.class);
+        flameThrowId = flameThrow.play(0);
+        flameThrow.setLooping(flameThrowId, true);
 
         this.body = gameWorld.getBox2DWorld().getBodyBuilder()
                 .fixture(gameWorld.getBox2DWorld().getFixtureDefBuilder()
@@ -117,6 +128,13 @@ public class Player extends Entity implements PhysicsObject {
 
         body.setLinearVelocity(velocity.x, velocity.y);
         fireDelay-= delta;
+
+
+        if(fire) {
+            flameThrowVol = Math.min(0.7f, flameThrowVol + delta);
+        }
+
+
         if (fire && fireDelay <= 0) {
             fireEffect.start();
             fireDelay = 0.1f;
@@ -131,7 +149,11 @@ public class Player extends Entity implements PhysicsObject {
             bullet.alive = .8f;
         } else if (!fire){
             fireEffect.allowCompletion();
+
+            flameThrowVol = Math.max(0, flameThrowVol - delta);
         }
+
+        flameThrow.setVolume(flameThrowId, flameThrowVol);
     }
 
     @Override public void drawDebug (ShapeRenderer shapeRenderer) {
@@ -141,6 +163,7 @@ public class Player extends Entity implements PhysicsObject {
     @Override
     public void dispose() {
         sprite.getTexture().dispose();
+        flameThrow.stop(flameThrowId);
     }
 
     @Override
@@ -151,6 +174,10 @@ public class Player extends Entity implements PhysicsObject {
     public void dmg(float value) {
         hp -= value;
         wasHit = true;
+
+        if(hp <= 0) {
+            flameThrow.stop(flameThrowId);
+        }
     }
 
     @Override

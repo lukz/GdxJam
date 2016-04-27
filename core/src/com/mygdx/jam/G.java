@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.mygdx.jam.utils.Assets;
 
 public class G {
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     // Virtual resolution - potato units
     public static int TARGET_WIDTH = 1280;
