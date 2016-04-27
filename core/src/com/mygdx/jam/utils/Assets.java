@@ -27,6 +27,9 @@ public class Assets extends AssetManager {
         public static final String Laser7 = "sounds/laser7.mp3";
         public static final String Laser8 = "sounds/laser8.mp3";
         public static final String Laser9 = "sounds/laser9.mp3";
+        public static final String Explosion = "sounds/explosion_2.wav";
+        public static final String Hit = "sounds/john_hit_2.wav";
+        public static final String Hit2 = "sounds/hit2.wav";
 
 
     }
@@ -50,6 +53,9 @@ public class Assets extends AssetManager {
         load(Sounds.Laser7, Sound.class);
         load(Sounds.Laser8, Sound.class);
         load(Sounds.Laser9, Sound.class);
+        load(Sounds.Explosion, Sound.class);
+        load(Sounds.Hit, Sound.class);
+        load(Sounds.Hit2, Sound.class);
 
     }
 

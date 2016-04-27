@@ -16,6 +16,7 @@ import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
+import com.mygdx.jam.utils.Assets;
 import com.mygdx.jam.view.WorldRenderer;
 
 /**
@@ -111,6 +112,9 @@ public class Enemy extends Entity implements PhysicsObject {
             new Effect(position.x, position.y, "alien-death.p", gameWorld);
 
             WorldRenderer.SHAKE_TIME += 0.2f;
+
+            G.assets.get(Assets.Sounds.Explosion, Sound.class).play(0.4f, 1 + MathUtils.random(-0.1f, 0.1f), 0);
+
         } else {
             fireDelay -= delta;
             if (fireDelay <= 0) {

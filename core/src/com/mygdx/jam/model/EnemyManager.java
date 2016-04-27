@@ -31,6 +31,8 @@ public class EnemyManager {
     }
 
     public void update(float delta) {
+        if(gameWorld.player == null && gameWorld.player2 == null) return;
+
         time += delta;
         timeLeftToSpawn -= delta;
         if(timeLeftToSpawn < 0) {

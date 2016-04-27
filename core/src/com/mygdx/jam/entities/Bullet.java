@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -85,6 +86,12 @@ public class Bullet extends Entity implements PhysicsObject {
             body.setLinearDamping(0);
             body.setLinearVelocity(vx / 4f, vy / 4f);
             alive = 1f;
+
+            // Randomize angle
+            Vector2 velocity = body.getLinearVelocity();
+            velocity.setAngle(velocity.angle() + MathUtils.random(-5f, 5f));
+            body.setLinearVelocity(velocity);
+
         }
 
 

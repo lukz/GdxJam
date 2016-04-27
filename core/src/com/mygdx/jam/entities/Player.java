@@ -105,7 +105,7 @@ public class Player extends Entity implements PhysicsObject {
         hpColor.lerp(Color.GREEN, hp);
         hpColor.a = 0.9f;
         healthSprite.setColor(hpColor);
-        healthSprite.setPosition(sprite.getX(), sprite.getY() + sprite.getHeight() * 0.8f);
+        healthSprite.setPosition(sprite.getX(), sprite.getY() + sprite.getHeight() * 0.1f);
         healthSprite.draw(batch);
     }
 
@@ -178,6 +178,9 @@ public class Player extends Entity implements PhysicsObject {
         if(hp <= 0) {
             flameThrow.stop(flameThrowId);
         }
+
+
+        G.assets.get(Assets.Sounds.Hit, Sound.class).play(0.6f, 1 + MathUtils.random(-0.1f, 0.1f), 0);
     }
 
     @Override

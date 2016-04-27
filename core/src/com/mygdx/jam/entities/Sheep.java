@@ -1,5 +1,6 @@
 package com.mygdx.jam.entities;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -11,6 +12,7 @@ import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
+import com.mygdx.jam.utils.Assets;
 
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
@@ -73,6 +75,9 @@ public class Sheep extends Entity implements PhysicsObject {
             new Effect(position.x, position.y, "blood.p", gameWorld);
             gameWorld.getEntityManager().removeEntity(this);
             player.hp = MathUtils.clamp(player.hp + .5f, 0, 1);
+
+            G.assets.get(Assets.Sounds.Hit2, Sound.class).play(0.8f, 1 + MathUtils.random(-0.1f, 0.1f), 0);
+
         }
     }
 
