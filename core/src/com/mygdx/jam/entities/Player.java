@@ -27,6 +27,7 @@ public class Player extends Entity implements PhysicsObject {
     private float SPEED = 5;
 
     private Sprite sprite;
+    public int fire;
 
     public Player(float x, float y, float radius, GameWorld gameWorld) {
         super(x, y, radius * 2, radius * 2);
