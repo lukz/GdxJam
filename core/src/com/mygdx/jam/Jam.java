@@ -20,6 +20,7 @@ public class Jam extends Game {
 		G.assets.load("fire2.p", ParticleEffect.class);
 		G.assets.load("fire3.p", ParticleEffect.class);
 		G.assets.load("coins.p", ParticleEffect.class);
+		G.assets.load("blood.p", ParticleEffect.class);
 		G.assets.load("coin.png", Texture.class);
 		G.assets.finishLoading();
 		log = new FPSLogger();

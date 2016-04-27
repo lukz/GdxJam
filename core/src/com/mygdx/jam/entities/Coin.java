@@ -68,8 +68,7 @@ public class Coin extends Entity implements PhysicsObject {
     public void handleBeginContact(PhysicsObject psycho2, GameWorld world) {
         if (psycho2 instanceof Player) {
             Player player = (Player)psycho2;
-            CoinEffect effect = new CoinEffect();
-            effect.init(position.x, position.y, gameWorld);
+            new Effect(position.x, position.y, "coins.p", gameWorld);
             gameWorld.getEntityManager().removeEntity(this);
             player.coins += 10;
         }

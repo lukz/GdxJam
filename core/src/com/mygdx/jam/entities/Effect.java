@@ -9,18 +9,15 @@ import com.mygdx.jam.model.GameWorld;
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
  */
-public class CoinEffect extends Entity {
+public class Effect extends Entity {
     private GameWorld gameWorld;
     private ParticleEffect effect;
 
-    public CoinEffect () {
-        super(0, 0, 32, 32);
-    }
-
-    public void init(float x, float y, GameWorld gameWorld) {
+    public Effect (float x, float y, String name, GameWorld gameWorld) {
+        super(x, y, 32, 32);
         this.gameWorld = gameWorld;
         gameWorld.getEntityManager().addEntity(this);
-        effect = new ParticleEffect(G.assets.get("coins.p", ParticleEffect.class));
+        effect = new ParticleEffect(G.assets.get(name, ParticleEffect.class));
         effect.setPosition(x, y);
         effect.reset();
     }

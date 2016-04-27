@@ -98,6 +98,7 @@ public class Enemy extends Entity implements PhysicsObject {
                 new Coin(position.x * Box2DWorld.WORLD_TO_BOX, position.y * Box2DWorld.WORLD_TO_BOX, gameWorld);
             }
             gameWorld.getEntityManager().removeEntity(this);
+            new Effect(position.x, position.y, "blood.p", gameWorld);
         } else {
             fireDelay -= delta;
             if (fireDelay <= 0) {
