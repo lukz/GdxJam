@@ -19,11 +19,13 @@ public class EnemyManager {
 
     private float time;
 
+    private int nextWaveCount = 3;
+
     public EnemyManager(GameWorld gameWorld) {
         this.gameWorld = gameWorld;
 
         for (int i = -2; i < 3; i++) {
-            Enemy enemy = new Enemy(G.TARGET_WIDTH / 2f - i * 200, G.TARGET_HEIGHT + 100, 24, gameWorld);
+            Enemy enemy = new Enemy(G.TARGET_WIDTH / 2f - i * 200, G.TARGET_HEIGHT + 100, 24, gameWorld, false);
             gameWorld.getEntityManager().addEntity(enemy);
         }
     }
@@ -33,10 +35,12 @@ public class EnemyManager {
         timeLeftToSpawn -= delta;
         if(timeLeftToSpawn < 0) {
 
-            for(int i = 0; i <= Math.max(1, (int)(time / 5f)); i++) {
-                Enemy enemy = new Enemy(G.TARGET_WIDTH * MathUtils.random(0.1f, 0.9f), G.TARGET_HEIGHT + 100, 24, gameWorld);
+            for(int i = 0; i <= nextWaveCount; i++) {
+                Enemy enemy = new Enemy(G.TARGET_WIDTH * MathUtils.random(0.1f, 0.9f), G.TARGET_HEIGHT + 100, 24, gameWorld, MathUtils.randomBoolean(0.2f));
                 gameWorld.getEntityManager().addEntity(enemy);
             }
+
+            nextWaveCount++;
 
             timeToSpawn -= timeToSpawnDelta + MathUtils.random(-2f, 1f);
             timeLeftToSpawn = Math.max(0.2f, timeToSpawn);

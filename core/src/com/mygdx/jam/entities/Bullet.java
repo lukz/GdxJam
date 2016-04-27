@@ -81,6 +81,8 @@ public class Bullet extends Entity implements PhysicsObject {
         alive = .5f;
 //        sprite.setSize(bounds.width, bounds.height);
 
+
+        sprite.setRotation(body.getLinearVelocity().angle() + 90);
     }
 
     @Override
