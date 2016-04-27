@@ -157,4 +157,8 @@ public class Player extends Entity implements PhysicsObject {
     public Vector2 getDirection() {
         return direction;
     }
+
+    public Sprite getSprite() {
+        return sprite;
+    }
 }

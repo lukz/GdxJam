@@ -3,6 +3,9 @@ package com.mygdx.jam.model;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -12,6 +15,10 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.jam.G;
 import com.mygdx.jam.controllers.PlayerController;
+import com.mygdx.jam.controllers.PlayerGamepadController;
+import com.mygdx.jam.entities.Enemy;
+import com.mygdx.jam.entities.Player;
+import com.mygdx.jam.entities.Wall;
 import com.mygdx.jam.entities.*;
 import com.mygdx.jam.utils.Constants;
 
@@ -49,6 +56,21 @@ public class GameWorld implements ContactListener {
         player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
         entityManager.addEntity(player);
         Gdx.input.setInputProcessor(new PlayerController(player));
+
+        if(Controllers.getControllers().size > 0) {
+            Controllers.getControllers().get(0).addListener(new PlayerGamepadController(player));
+        }
+
+        if(Controllers.getControllers().size > 1) {
+            player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
+
+            Color color = new Color(Color.BLUE);
+            color.lerp(Color.WHITE, 0.5f);
+            player.getSprite().setColor(color);
+            Controllers.getControllers().get(1).addListener(new PlayerGamepadController(player));
+            entityManager.addEntity(player);
+        }
+
 
 
         // Walls
