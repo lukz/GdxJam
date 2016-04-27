@@ -3,12 +3,14 @@ package com.mygdx.jam.entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
@@ -18,7 +20,7 @@ import com.mygdx.jam.model.PhysicsObject;
  */
 public class Player extends Entity implements PhysicsObject {
 
-
+    private final ParticleEffect fireEffect;
     // Physics
     private Body body;
     private boolean flagForDelete = false;
@@ -56,10 +58,15 @@ public class Player extends Entity implements PhysicsObject {
 
         sprite = new Sprite(new Texture(Gdx.files.internal("dragon.png")));
         healthSprite = new Sprite(new Texture(Gdx.files.internal("pixel.png")));
+
+        fireEffect = new ParticleEffect(G.assets.get("fire3.p", ParticleEffect.class));
+        fireEffect.setPosition(x, y);
+        fireEffect.reset();
     }
 
     @Override
     public void draw(SpriteBatch batch) {
+        fireEffect.draw(batch);
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         sprite.draw(batch);
 
@@ -80,16 +87,25 @@ public class Player extends Entity implements PhysicsObject {
         position.set(pos).scl(Box2DWorld.BOX_TO_WORLD);
         velocity.set(direction).nor().scl(SPEED);
 
+        fireEffect.setPosition(position.x, position.y + .75f * Box2DWorld.BOX_TO_WORLD );
+        fireEffect.update(delta);
+
         body.setLinearVelocity(velocity.x, velocity.y);
         fireDelay-= delta;
         if (fire > 0 && fireDelay <= 0) {
+            fireEffect.start();
             fireDelay = 0.1f;
             Bullet bullet = new Bullet();
             bullet.setBounds(48, 48);
             bullet.type = Bullet.BulletType.PLAYER;
-            bullet.tint.set(Color.ORANGE);
+//            bullet.tint.set(Color.ORANGE);
+            bullet.tint.set(0, 0, 0, 0);
             bullet.damage = 10f;
-            bullet.init(pos.x, pos.y + .75f, 0, 16, gameWorld);
+            bullet.init(pos.x, pos.y + .75f, 0, 6, gameWorld);
+            bullet.body.setLinearDamping(.25f);
+            bullet.alive = .8f;
+        } else if (fire <= 0){
+            fireEffect.allowCompletion();
         }
     }
 
