@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.jam.G;
@@ -14,7 +15,7 @@ import com.mygdx.jam.model.PhysicsObject;
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
  */
-public class Coin extends Entity implements PhysicsObject {
+public class Sheep extends Entity implements PhysicsObject {
     // Physics
     public Body body;
     private boolean flagForDelete = false;
@@ -25,8 +26,8 @@ public class Coin extends Entity implements PhysicsObject {
 
     private GameWorld gameWorld;
 
-    public Coin (float x, float y, GameWorld gameWorld) {
-        super(x, y, 32, 32);
+    public Sheep (float x, float y, GameWorld gameWorld) {
+        super(x, y, 48, 48);
         this.gameWorld = gameWorld;
         this.body = gameWorld.getBox2DWorld().getBodyBuilder().fixture(
            gameWorld.getBox2DWorld().getFixtureDefBuilder().circleShape(getBounds().getWidth() / 2 * Box2DWorld.WORLD_TO_BOX).density(1f).friction(0.2f).restitution(0.5f)
@@ -34,13 +35,14 @@ public class Coin extends Entity implements PhysicsObject {
                         .categoryBits(Box2DWorld.CATEGORY.POWERUP)
               .build())
 //                .fixedRotation()
-           .angularDamping(10f).linearDamping(5f).position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX).type(BodyDef.BodyType.DynamicBody).userData(this).build();
+           .angularDamping(10f).position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX).type(BodyDef.BodyType.DynamicBody).userData(this).build();
 
 
 
-        sprite = new Sprite(G.assets.get("coin.png", Texture.class));
+        sprite = new Sprite(G.assets.get("sheep.png", Texture.class));
         gameWorld.getEntityManager().addEntity(this);
-        body.setTransform(x, y, 0);
+//        body.setTransform(x, y, 0);
+        body.setLinearVelocity(0, -3);
         sprite.setSize(bounds.width, bounds.height);
     }
 
@@ -68,9 +70,9 @@ public class Coin extends Entity implements PhysicsObject {
     public void handleBeginContact(PhysicsObject psycho2, GameWorld world) {
         if (psycho2 instanceof Player) {
             Player player = (Player)psycho2;
-            new Effect(position.x, position.y, "coins.p", gameWorld);
+            new Effect(position.x, position.y, "blood.p", gameWorld);
             gameWorld.getEntityManager().removeEntity(this);
-            player.coins += 10;
+            player.hp = MathUtils.clamp(player.hp + .5f, 0, 1);
         }
     }
 
