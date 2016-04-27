@@ -1,6 +1,7 @@
 package com.mygdx.jam.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,8 +28,12 @@ public class Player extends Entity implements PhysicsObject {
     private float SPEED = 5;
 
     private Sprite sprite;
+    private Sprite healthSprite;
     public int fire;
     private GameWorld gameWorld;
+
+    float hp = 1;
+    private Color hpColor = new Color();
 
     public Player(float x, float y, float radius, GameWorld gameWorld) {
         super(x, y, radius * 2, radius * 2);
@@ -50,12 +55,22 @@ public class Player extends Entity implements PhysicsObject {
                 .build();
 
         sprite = new Sprite(new Texture(Gdx.files.internal("dragon.png")));
+        healthSprite = new Sprite(new Texture(Gdx.files.internal("pixel.png")));
     }
 
     @Override
     public void draw(SpriteBatch batch) {
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         sprite.draw(batch);
+
+        // Draw health
+        healthSprite.setBounds(0, 0, sprite.getWidth() * hp, 10);
+        hpColor.set(Color.RED);
+        hpColor.lerp(Color.GREEN, hp);
+        hpColor.a = 0.9f;
+        healthSprite.setColor(hpColor);
+        healthSprite.setPosition(sprite.getX(), sprite.getY() + sprite.getHeight() * 0.8f);
+        healthSprite.draw(batch);
     }
 
     float fireDelay;
@@ -63,7 +78,6 @@ public class Player extends Entity implements PhysicsObject {
     public void update(float delta) {
         Vector2 pos = body.getPosition();
         position.set(pos).scl(Box2DWorld.BOX_TO_WORLD);
-
         velocity.set(direction).nor().scl(SPEED);
 
         body.setLinearVelocity(velocity.x, velocity.y);
