@@ -20,15 +20,19 @@ public class PlayerController extends InputAdapter {
 
         switch (keycode) {
             case Input.Keys.LEFT:
+            case Input.Keys.A:
                 player.getDirection().x = -1;
                 return true;
             case Input.Keys.RIGHT:
+            case Input.Keys.D:
                 player.getDirection().x = 1;
                 return true;
             case Input.Keys.UP:
+            case Input.Keys.W:
                 player.getDirection().y = 1;
                 return true;
             case Input.Keys.DOWN:
+            case Input.Keys.S:
                 player.getDirection().y = -1;
                 return true;
         }
@@ -39,15 +43,19 @@ public class PlayerController extends InputAdapter {
     public boolean keyUp(int keycode) {
         switch (keycode) {
             case Input.Keys.LEFT:
+            case Input.Keys.A:
                 if(player.getDirection().x == -1) player.getDirection().x = 0;
                 return true;
             case Input.Keys.RIGHT:
+            case Input.Keys.D:
                 if(player.getDirection().x == 1) player.getDirection().x = 0;
                 return true;
             case Input.Keys.UP:
+            case Input.Keys.W:
                 if(player.getDirection().y == 1) player.getDirection().y = 0;
                 return true;
             case Input.Keys.DOWN:
+            case Input.Keys.S:
                 if(player.getDirection().y == -1) player.getDirection().y = 0;
                 return true;
         }
