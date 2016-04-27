@@ -34,6 +34,7 @@ public class Player extends Entity implements PhysicsObject {
     private Sprite healthSprite;
     public boolean fire;
     private GameWorld gameWorld;
+    private boolean wasHit;
 
     public float hp = 1;
     private Color hpColor = new Color();
@@ -69,12 +70,21 @@ public class Player extends Entity implements PhysicsObject {
     @Override
     public void draw(SpriteBatch batch) {
         fireEffect.draw(batch);
+
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         spriteAttack.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+        if (wasHit) {
+            batch.setShader(G.shader);
+        }
         if (fire) {
             spriteAttack.draw(batch);
         } else {
             sprite.draw(batch);
+        }
+
+        if (wasHit) {
+            batch.setShader(null);
+            wasHit = false;
         }
 
         // Draw health
@@ -135,6 +145,11 @@ public class Player extends Entity implements PhysicsObject {
     @Override
     public void handleBeginContact(PhysicsObject psycho2, GameWorld world) {
 
+    }
+
+    public void dmg(float value) {
+        hp -= value;
+        wasHit = true;
     }
 
     @Override

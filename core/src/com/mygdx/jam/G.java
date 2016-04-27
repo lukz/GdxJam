@@ -1,6 +1,7 @@
 package com.mygdx.jam;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.mygdx.jam.utils.Assets;
 
 public class G {
@@ -14,4 +15,5 @@ public class G {
     public static Game game;
     public static Assets assets;
 
+    public static ShaderProgram shader;
 }
