@@ -22,6 +22,7 @@ public class GameWorld implements ContactListener {
     // Managers
     private EntityManager entityManager;
     private BackgroundManager backgroundManager;
+    private EnemyManager enemyManager;
 
     public static enum GameState { WAITING_TO_START, IN_GAME, FINISH };
     private GameState gameState = GameState.WAITING_TO_START;
@@ -32,6 +33,7 @@ public class GameWorld implements ContactListener {
 
         entityManager = new EntityManager();
         backgroundManager = new BackgroundManager();
+        enemyManager = new EnemyManager(this);
 
         // Pass all collisions through this class
         box2DWorld.getWorld().setContactListener(this);
@@ -47,11 +49,6 @@ public class GameWorld implements ContactListener {
         Gdx.input.setInputProcessor(new PlayerController(player));
 
 
-        for (int i = -2; i < 3; i++) {
-            Enemy enemy = new Enemy(G.TARGET_WIDTH / 2f - i * 200, G.TARGET_HEIGHT - 100, 24, this);
-            entityManager.addEntity(enemy);
-        }
-
         // Walls
         new Wall(0, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
         new Wall(G.TARGET_WIDTH, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
@@ -66,6 +63,7 @@ public class GameWorld implements ContactListener {
 
         entityManager.update(delta);
         backgroundManager.update(delta);
+        enemyManager.update(delta);
     }
 
 

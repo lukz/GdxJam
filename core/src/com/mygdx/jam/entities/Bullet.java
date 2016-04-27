@@ -47,11 +47,26 @@ public class Bullet extends Entity implements PhysicsObject {
 
     public void init(float x, float y, float vx, float vy, GameWorld gameWorld) {
         this.gameWorld = gameWorld;
+
+        short categoryBits = 0x0000;
+        short maskBits = 0x0000;
+
+        switch(type) {
+            case PLAYER:
+                categoryBits = Box2DWorld.CATEGORY.PLAYER_BULLET;
+                maskBits = Box2DWorld.PLAYER_BULLET_MASK;
+                break;
+            case ENEMY:
+                categoryBits = Box2DWorld.CATEGORY.ENEMY_BULLET;
+                maskBits = Box2DWorld.ENEMY_BULLET_MASK;
+                break;
+        }
+
         this.body = gameWorld.getBox2DWorld().getBodyBuilder().fixture(
-           gameWorld.getBox2DWorld().getFixtureDefBuilder().circleShape(getBounds().getWidth() / 2 * Box2DWorld.WORLD_TO_BOX).density(1f).friction(0.2f).restitution(0.5f)
+           gameWorld.getBox2DWorld().getFixtureDefBuilder().circleShape(getBounds().getWidth() / 2 * Box2DWorld.WORLD_TO_BOX).density(1f).friction(0.2f).restitution(0.5f).categoryBits(categoryBits).maskBits(maskBits)
 //                                .maskBits(Box2DWorld.WALKER_MASK)
 //                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
-              .build())
+                   .build())
 //                .fixedRotation()
            .angularDamping(10f).linearDamping(5f).position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX).type(BodyDef.BodyType.DynamicBody).userData(this).build();
 

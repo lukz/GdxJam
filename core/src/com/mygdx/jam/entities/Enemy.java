@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
@@ -35,9 +36,14 @@ public class Enemy extends Entity implements PhysicsObject {
 
     private EnemyController enemyController = new EnemyController(this);
 
+    private Vector2 targetPosition = new Vector2();
+    private boolean targetPositionReached = false;
+
     public Enemy (float x, float y, float radius, GameWorld gameWorld) {
         super(x, y, radius * 2, radius * 2);
         this.gameWorld = gameWorld;
+
+        targetPosition.set(x, G.TARGET_HEIGHT * 0.6f);
 
         this.body = gameWorld.getBox2DWorld().getBodyBuilder()
                 .fixture(gameWorld.getBox2DWorld().getFixtureDefBuilder()
@@ -45,8 +51,8 @@ public class Enemy extends Entity implements PhysicsObject {
                         .density(1f)
                         .friction(0.1f)
                         .restitution(0.5f)
-//                                .maskBits(Box2DWorld.WALKER_MASK)
-//                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
+                        .maskBits(Box2DWorld.ENEMY_MASK)
+                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
                         .build())
                 .fixedRotation()
                 .position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX)
@@ -66,10 +72,21 @@ public class Enemy extends Entity implements PhysicsObject {
     float fireDelay = MathUtils.random(1.5f);
     @Override
     public void update(float delta) {
-        enemyController.update(delta);
-
         Vector2 pos = body.getPosition();
         position.set(pos).scl(Box2DWorld.BOX_TO_WORLD);
+
+
+        if(!targetPositionReached) {
+            position.lerp(targetPosition, delta * SPEED / 2);
+            body.setTransform(position.x * Box2DWorld.WORLD_TO_BOX, position.y * Box2DWorld.WORLD_TO_BOX, 0);
+
+            if(position.dst(targetPosition) < 40) {
+                targetPositionReached = true;
+            }
+        } else {
+            enemyController.update(delta);
+
+        }
 
         velocity.set(direction).scl(SPEED);
 

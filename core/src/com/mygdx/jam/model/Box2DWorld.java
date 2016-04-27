@@ -22,10 +22,15 @@ public class Box2DWorld {
     /*
      * Masks and categories used to filter collisions
      */
-    public final static short WALKER_MASK = CATEGORY.WALKER;
+    public final static short ENEMY_MASK = CATEGORY.PLAYER | CATEGORY.PLAYER_BULLET;
+    public final static short ENEMY_BULLET_MASK = CATEGORY.PLAYER;
+    public final static short PLAYER_BULLET_MASK = CATEGORY.ENEMY | CATEGORY.ENEMY_BULLET;
 
     public final static class CATEGORY {
-        public final static short WALKER = 0x0001;
+        public final static short ENEMY = 0x0001;
+        public final static short PLAYER = 0x0002;
+        public final static short PLAYER_BULLET = 0x0004;
+        public final static short ENEMY_BULLET = 0x0008;
     };
 
     private World world;

@@ -48,8 +48,8 @@ public class Player extends Entity implements PhysicsObject {
                         .density(1f)
                         .friction(0.1f)
                         .restitution(0.5f)
-//                                .maskBits(Box2DWorld.WALKER_MASK)
-//                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
+//                                .maskBits(Box2DWorld.MA)
+                        .categoryBits(Box2DWorld.CATEGORY.PLAYER)
                         .build())
                 .fixedRotation()
                 .position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX)
@@ -102,7 +102,7 @@ public class Player extends Entity implements PhysicsObject {
 //            bullet.tint.set(Color.ORANGE);
             bullet.tint.set(0, 0, 0, 0);
             bullet.damage = 10f;
-            bullet.init(pos.x, pos.y + .75f, 0, 6, gameWorld);
+            bullet.init(pos.x, pos.y + .75f, 0, 5, gameWorld);
             bullet.body.setLinearDamping(.25f);
             bullet.alive = .8f;
         } else if (fire <= 0){
