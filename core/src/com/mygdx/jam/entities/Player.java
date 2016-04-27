@@ -30,6 +30,7 @@ public class Player extends Entity implements PhysicsObject {
     private float SPEED = 5;
 
     private Sprite sprite;
+    private Sprite spriteAttack;
     private Sprite healthSprite;
     public int fire;
     private GameWorld gameWorld;
@@ -58,6 +59,7 @@ public class Player extends Entity implements PhysicsObject {
                 .build();
 
         sprite = new Sprite(new Texture(Gdx.files.internal("dragon.png")));
+        spriteAttack = new Sprite(new Texture(Gdx.files.internal("dragon-attack.png")));
         healthSprite = new Sprite(new Texture(Gdx.files.internal("pixel.png")));
 
         fireEffect = new ParticleEffect(G.assets.get("fire3.p", ParticleEffect.class));
@@ -69,7 +71,12 @@ public class Player extends Entity implements PhysicsObject {
     public void draw(SpriteBatch batch) {
         fireEffect.draw(batch);
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
-        sprite.draw(batch);
+        spriteAttack.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+        if (fire > 0) {
+            spriteAttack.draw(batch);
+        } else {
+            sprite.draw(batch);
+        }
 
         // Draw health
         healthSprite.setBounds(0, 0, sprite.getWidth() * hp, 10);
@@ -87,6 +94,13 @@ public class Player extends Entity implements PhysicsObject {
         Vector2 pos = body.getPosition();
         position.set(pos).scl(Box2DWorld.BOX_TO_WORLD);
         velocity.set(direction).nor().scl(SPEED);
+        if (direction.x > 0) {
+            sprite.setFlip(false, false);
+            spriteAttack.setFlip(false, false);
+        } else if (direction.x < 0) {
+            sprite.setFlip(true, false);
+            spriteAttack.setFlip(true, false);
+        }
 
         fireEffect.setPosition(position.x, position.y + .75f * Box2DWorld.BOX_TO_WORLD );
         fireEffect.update(delta);
