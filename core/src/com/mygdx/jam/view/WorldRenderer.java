@@ -76,7 +76,7 @@ public class WorldRenderer {
         }
 
         if (gameWorld.player != null) {
-            int score = gameWorld.player.coins;
+            int score = gameWorld.coins;
             batch.begin();
             font.draw(batch, "Score: " + score, G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
             batch.end();

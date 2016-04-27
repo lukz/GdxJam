@@ -31,10 +31,14 @@ public class GameWorld implements ContactListener {
     private BackgroundManager backgroundManager;
     private EnemyManager enemyManager;
     public Player player;
+    public Player player2;
     private PlayerDead dead;
 
     public static enum GameState { WAITING_TO_START, IN_GAME, FINISH };
     private GameState gameState = GameState.WAITING_TO_START;
+
+
+    public int coins;
 
     public GameWorld () {
 
@@ -62,16 +66,14 @@ public class GameWorld implements ContactListener {
         }
 
         if(Controllers.getControllers().size > 1) {
-            player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
+            player2 = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
 
             Color color = new Color(Color.BLUE);
             color.lerp(Color.WHITE, 0.5f);
-            player.getSprite().setColor(color);
-            Controllers.getControllers().get(1).addListener(new PlayerGamepadController(player));
-            entityManager.addEntity(player);
+            player2.getSprite().setColor(color);
+            Controllers.getControllers().get(1).addListener(new PlayerGamepadController(player2));
+            entityManager.addEntity(player2);
         }
-
-
 
         // Walls
         new Wall(0, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
@@ -100,11 +102,45 @@ public class GameWorld implements ContactListener {
             player = null;
             Gdx.input.setInputProcessor(null);
         }
-        if (player == null && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+
+        if (player2 != null && player2.hp <= 0) {
+            Vector2 position = player2.getPosition();
+            entityManager.addEntity(dead = new PlayerDead(position.x, position.y, 40, this));
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            entityManager.removeEntity(player2);
+            player2 = null;
+            Gdx.input.setInputProcessor(null);
+        }
+
+
+
+        if (player == null && player2 == null && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             if (dead != null) entityManager.removeEntity(dead);
             player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
             entityManager.addEntity(player);
             Gdx.input.setInputProcessor(new PlayerController(player));
+
+            if(Controllers.getControllers().size > 0) {
+                Controllers.getControllers().get(0).addListener(new PlayerGamepadController(player));
+            }
+
+            if(Controllers.getControllers().size > 1) {
+                player2 = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
+                entityManager.addEntity(player2);
+                Controllers.getControllers().get(1).addListener(new PlayerGamepadController(player2));
+            }
+
+            for (Entity entity : entityManager.getEntitiesClass(Enemy.class)) {
+                entityManager.removeEntity(entity);
+            }
+
+            for (Entity entity : entityManager.getEntitiesClass(Bullet.class)) {
+                entityManager.removeEntity(entity);
+            }
+
         }
     }
 

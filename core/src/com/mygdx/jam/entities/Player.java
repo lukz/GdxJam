@@ -34,7 +34,6 @@ public class Player extends Entity implements PhysicsObject {
     private Sprite healthSprite;
     public boolean fire;
     private GameWorld gameWorld;
-    public int coins;
 
     public float hp = 1;
     private Color hpColor = new Color();
