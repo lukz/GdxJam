@@ -40,9 +40,12 @@ public class Enemy extends Entity implements PhysicsObject {
     private Vector2 targetPosition = new Vector2();
     private boolean targetPositionReached = false;
 
-    public Enemy (float x, float y, float radius, GameWorld gameWorld) {
+    private boolean isUfo;
+
+    public Enemy (float x, float y, float radius, GameWorld gameWorld, boolean isUfo) {
         super(x, y, radius * 2, radius * 2);
         this.gameWorld = gameWorld;
+        this.isUfo = isUfo;
 
         targetPosition.set(x, G.TARGET_HEIGHT * 0.6f);
 
@@ -61,7 +64,11 @@ public class Enemy extends Entity implements PhysicsObject {
                 .userData(this)
                 .build();
 
-        sprite = new Sprite(new Texture(Gdx.files.internal("enemy/enemy ("+ MathUtils.random(1, 20)+").png")));
+        if(!isUfo) {
+            sprite = new Sprite(new Texture(Gdx.files.internal("enemy/enemy ("+ MathUtils.random(1, 20)+").png")));
+        } else {
+            sprite = new Sprite(new Texture(Gdx.files.internal("enemy/ufo ("+ MathUtils.random(1, 4)+").png")));
+        }
         sprite.setScale(0.7f);
     }
 
@@ -106,14 +113,38 @@ public class Enemy extends Entity implements PhysicsObject {
         } else {
             fireDelay -= delta;
             if (fireDelay <= 0) {
-                fireDelay = 1.5f;
-                Bullet bullet = new Bullet();
-                bullet.setBounds(24, 24);
-                bullet.type = Bullet.BulletType.ENEMY;
-                bullet.tint.set(Color.GREEN);
-                bullet.damage = 0.1f;
-                bullet.init(pos.x, pos.y - .75f, 0, -16, gameWorld);
+
+                if(!isUfo) {
+                    fireDelay = 1.5f;
+                    Bullet bullet = new Bullet();
+                    bullet.setBounds(24, 24);
+                    bullet.type = Bullet.BulletType.ENEMY;
+                    bullet.tint.set(Color.GREEN);
+                    bullet.damage = 0.1f;
+                    bullet.init(pos.x, pos.y - .75f, 0, -16, gameWorld);
+                } else {
+                    Vector2 direction = new Vector2();
+
+                    for(int i = 0; i < 8; i++) {
+
+                        direction.set(0, -16);
+                        direction.setAngle(360f / 8f * i);
+
+                        Bullet bullet = new Bullet();
+                        bullet.setBounds(24, 24);
+                        bullet.type = Bullet.BulletType.ENEMY;
+                        bullet.tint.set(Color.GREEN);
+                        bullet.damage = 0.1f;
+                        bullet.init(pos.x, pos.y - .75f, direction.x, direction.y, gameWorld);
+                    }
+
+                    fireDelay = 3f;
+
+                }
+
             }
+
+
         }
     }
 
