@@ -42,7 +42,7 @@ public class Sheep extends Entity implements PhysicsObject {
         sprite = new Sprite(G.assets.get("sheep.png", Texture.class));
         gameWorld.getEntityManager().addEntity(this);
 //        body.setTransform(x, y, 0);
-        body.setLinearVelocity(0, -3);
+        body.setLinearVelocity(0, -1);
         sprite.setSize(bounds.width, bounds.height);
     }
 
