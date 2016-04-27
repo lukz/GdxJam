@@ -15,64 +15,38 @@ import com.mygdx.jam.model.PhysicsObject;
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
  */
-public class Player extends Entity implements PhysicsObject {
+public class Wall extends Entity implements PhysicsObject {
 
 
     // Physics
     private Body body;
     private boolean flagForDelete = false;
 
-    private Vector2 direction = new Vector2();
-    private Vector2 velocity = new Vector2();
-    private float SPEED = 5;
-
-    private Sprite sprite;
-    public int fire;
-    private GameWorld gameWorld;
-
-    public Player(float x, float y, float radius, GameWorld gameWorld) {
-        super(x, y, radius * 2, radius * 2);
-        this.gameWorld = gameWorld;
+    public Wall(float x, float y, float width, float height, GameWorld gameWorld) {
+        super(x, y, width, height);
 
         this.body = gameWorld.getBox2DWorld().getBodyBuilder()
                 .fixture(gameWorld.getBox2DWorld().getFixtureDefBuilder()
-                        .circleShape(getBounds().getWidth() / 2 * Box2DWorld.WORLD_TO_BOX)
+                        .boxShape(width / 2 * Box2DWorld.WORLD_TO_BOX, height / 2 * Box2DWorld.WORLD_TO_BOX)
                         .density(1f)
-                        .friction(0.1f)
+                        .friction(0)
                         .restitution(0.5f)
 //                                .maskBits(Box2DWorld.WALKER_MASK)
 //                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
                         .build())
-                .fixedRotation()
+//                .fixedRotation()
                 .position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX)
-                .type(BodyDef.BodyType.DynamicBody)
+                .type(BodyDef.BodyType.KinematicBody)
                 .userData(this)
                 .build();
-
-        sprite = new Sprite(new Texture(Gdx.files.internal("dragon.png")));
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
-        sprite.draw(batch);
     }
 
-    float fireDelay;
     @Override
     public void update(float delta) {
-        Vector2 pos = body.getPosition();
-        position.set(pos).scl(Box2DWorld.BOX_TO_WORLD);
-
-        velocity.set(direction).nor().scl(SPEED);
-
-        body.setLinearVelocity(velocity.x, velocity.y);
-        fireDelay-= delta;
-        if (fire > 0 && fireDelay <= 0) {
-            fireDelay = 0.1f;
-            Bullet bullet = Bullet.pool.obtain();
-            bullet.init(pos.x, pos.y, 0, 16, gameWorld);
-        }
     }
 
     @Override public void drawDebug (ShapeRenderer shapeRenderer) {
@@ -102,9 +76,5 @@ public class Player extends Entity implements PhysicsObject {
     @Override
     public void setFlagForDelete(boolean flag) {
         flagForDelete = flag;
-    }
-
-    public Vector2 getDirection() {
-        return direction;
     }
 }
