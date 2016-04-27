@@ -82,7 +82,7 @@ public class WorldRenderer {
         }
 
         if (gameWorld.player != null) {
-            int score = gameWorld.player.coins;
+            int score = gameWorld.coins;
             batch.begin();
             font.draw(batch, Integer.toString(score), G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
             if (coins.size > score) coins.clear();
