@@ -37,6 +37,7 @@ public class Player extends Entity implements PhysicsObject {
     private Sprite healthSprite;
     public boolean fire;
     private GameWorld gameWorld;
+    private boolean wasHit;
 
     public float hp = 1;
     private Color hpColor = new Color();
@@ -80,12 +81,21 @@ public class Player extends Entity implements PhysicsObject {
     @Override
     public void draw(SpriteBatch batch) {
         fireEffect.draw(batch);
+
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         spriteAttack.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+        if (wasHit) {
+            batch.setShader(G.shader);
+        }
         if (fire) {
             spriteAttack.draw(batch);
         } else {
             sprite.draw(batch);
+        }
+
+        if (wasHit) {
+            batch.setShader(null);
+            wasHit = false;
         }
 
         // Draw health
@@ -117,11 +127,12 @@ public class Player extends Entity implements PhysicsObject {
 
         body.setLinearVelocity(velocity.x, velocity.y);
         fireDelay-= delta;
-        Gdx.app.log("", "fire " + fire);
+
 
         if(fire) {
-            flameThrowVol = Math.min(1, flameThrowVol + delta);
+            flameThrowVol = Math.min(0.7f, flameThrowVol + delta);
         }
+
 
         if (fire && fireDelay <= 0) {
             fireEffect.start();
@@ -142,7 +153,6 @@ public class Player extends Entity implements PhysicsObject {
         }
 
         flameThrow.setVolume(flameThrowId, flameThrowVol);
-        System.out.println(flameThrowVol);
     }
 
     @Override public void drawDebug (ShapeRenderer shapeRenderer) {
@@ -152,12 +162,21 @@ public class Player extends Entity implements PhysicsObject {
     @Override
     public void dispose() {
         sprite.getTexture().dispose();
-        flameThrow.stop();
+        flameThrow.stop(flameThrowId);
     }
 
     @Override
     public void handleBeginContact(PhysicsObject psycho2, GameWorld world) {
 
+    }
+
+    public void dmg(float value) {
+        hp -= value;
+        wasHit = true;
+
+        if(hp <= 0) {
+            flameThrow.stop(flameThrowId);
+        }
     }
 
     @Override

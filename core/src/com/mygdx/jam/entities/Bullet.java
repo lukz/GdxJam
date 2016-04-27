@@ -140,7 +140,7 @@ public class Bullet extends Entity implements PhysicsObject {
         } else if (psycho2 instanceof Player) {
             Player player = (Player)psycho2;
             if (type == BulletType.ENEMY) {
-                player.hp -= damage;
+                player.dmg(damage);
                 WorldRenderer.SHAKE_TIME += 0.2f;
             }
             gameWorld.getEntityManager().removeEntity(this);
