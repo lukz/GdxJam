@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -54,9 +55,21 @@ public class GameWorld implements ContactListener {
         entityManager.addEntity(player);
         Gdx.input.setInputProcessor(new PlayerController(player));
 
-        if(Controllers.getControllers().size == 1) {
+        if(Controllers.getControllers().size > 0) {
             Controllers.getControllers().get(0).addListener(new PlayerGamepadController(player));
         }
+
+        if(Controllers.getControllers().size > 1) {
+            player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
+
+            Color color = new Color(Color.BLUE);
+            color.lerp(Color.WHITE, 0.5f);
+            player.getSprite().setColor(color);
+            Controllers.getControllers().get(1).addListener(new PlayerGamepadController(player));
+            entityManager.addEntity(player);
+        }
+
+
 
         // Walls
         new Wall(0, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
