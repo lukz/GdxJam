@@ -76,6 +76,10 @@ public class Enemy extends Entity implements PhysicsObject {
 
         body.setLinearVelocity(velocity.x, velocity.y);
         if (health <= 0 ) {
+            if (MathUtils.random() > 0) {
+                // FFS
+                new Coin(position.x * Box2DWorld.WORLD_TO_BOX, position.y * Box2DWorld.WORLD_TO_BOX, gameWorld);
+            }
             gameWorld.getEntityManager().removeEntity(this);
         } else {
             fireDelay -= delta;
