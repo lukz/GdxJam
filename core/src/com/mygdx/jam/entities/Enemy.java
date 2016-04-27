@@ -123,7 +123,11 @@ public class Enemy extends Entity implements PhysicsObject {
 
     @Override
     public void handleBeginContact(PhysicsObject psycho2, GameWorld world) {
-
+        if (psycho2 instanceof Player) {
+            Player player = (Player)psycho2;
+            player.hp -= 0.1f;
+            health -= 20;
+        }
     }
 
     @Override
