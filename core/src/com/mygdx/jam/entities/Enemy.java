@@ -15,6 +15,7 @@ import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
+import com.mygdx.jam.view.WorldRenderer;
 
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
@@ -94,12 +95,15 @@ public class Enemy extends Entity implements PhysicsObject {
 
         body.setLinearVelocity(velocity.x, velocity.y);
         if (health <= 0 ) {
-            if (MathUtils.random() > .66f) {
-                // FFS
-                new Coin(position.x * Box2DWorld.WORLD_TO_BOX, position.y * Box2DWorld.WORLD_TO_BOX, gameWorld);
-            }
+
+            // FFS
+            new Coin(position.x * Box2DWorld.WORLD_TO_BOX, position.y * Box2DWorld.WORLD_TO_BOX, gameWorld);
+
             gameWorld.getEntityManager().removeEntity(this);
             new Effect(position.x, position.y, "blood.p", gameWorld);
+
+            WorldRenderer.SHAKE_TIME += 0.2f;
+
         } else {
             fireDelay -= delta;
             if (fireDelay <= 0) {
@@ -128,6 +132,7 @@ public class Enemy extends Entity implements PhysicsObject {
         if (psycho2 instanceof Player) {
             Player player = (Player)psycho2;
             player.hp -= 0.1f;
+            WorldRenderer.SHAKE_TIME += 0.1f;
             health -= 20;
         }
     }

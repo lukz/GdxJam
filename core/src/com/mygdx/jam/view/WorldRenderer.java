@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jam.G;
@@ -21,6 +22,11 @@ public class WorldRenderer {
     private Viewport viewport;
     private SpriteBatch batch;
 
+
+    public static float SHAKE_TIME = 0;
+
+    private Color clearColor = Color.valueOf("817e79");
+
     public WorldRenderer(GameWorld world) {
         this.gameWorld = world;
         cam = new OrthographicCamera();
@@ -33,15 +39,22 @@ public class WorldRenderer {
     }
 
     public void render(float delta) {
-        cam.position.x = G.TARGET_WIDTH / 2;
-        cam.position.y = G.TARGET_HEIGHT / 2;
+        if(SHAKE_TIME > 0) {
+            SHAKE_TIME -= delta;
+            cam.position.x = G.TARGET_WIDTH / 2 + MathUtils.random(-10, 10);
+            cam.position.y = G.TARGET_HEIGHT / 2 + MathUtils.random(-10, 10);
+            Gdx.input.vibrate((int)(SHAKE_TIME * 1000));
+        } else {
+            cam.position.x = G.TARGET_WIDTH / 2;
+            cam.position.y = G.TARGET_HEIGHT / 2;
+        }
 
         // Update camera
         cam.update();
         batch.setProjectionMatrix(cam.combined);
 
         // Clear screen
-        Gdx.gl.glClearColor(245 / 255f, 226 / 255f, 215 / 255f, 1);
+        Gdx.gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();

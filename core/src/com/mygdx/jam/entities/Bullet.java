@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Pool;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
+import com.mygdx.jam.view.WorldRenderer;
 
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
@@ -132,6 +133,7 @@ public class Bullet extends Entity implements PhysicsObject {
             Player player = (Player)psycho2;
             if (type == BulletType.ENEMY) {
                 player.hp -= damage;
+                WorldRenderer.SHAKE_TIME += 0.2f;
             }
             gameWorld.getEntityManager().removeEntity(this);
         } else if (psycho2 instanceof Enemy) {
