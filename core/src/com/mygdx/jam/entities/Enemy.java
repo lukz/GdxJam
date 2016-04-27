@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -26,11 +27,13 @@ public class Enemy extends Entity implements PhysicsObject {
 
     private Vector2 direction = new Vector2();
     private Vector2 velocity = new Vector2();
-    private float SPEED = 5;
+    private float SPEED = MathUtils.random(2f, 4f);
 
     private Sprite sprite;
     public float health = 10;
     private GameWorld gameWorld;
+
+    private EnemyController enemyController = new EnemyController(this);
 
     public Enemy (float x, float y, float radius, GameWorld gameWorld) {
         super(x, y, radius * 2, radius * 2);
@@ -63,10 +66,13 @@ public class Enemy extends Entity implements PhysicsObject {
     float fireDelay = MathUtils.random(1.5f);
     @Override
     public void update(float delta) {
+        enemyController.update(delta);
+
         Vector2 pos = body.getPosition();
         position.set(pos).scl(Box2DWorld.BOX_TO_WORLD);
 
-        velocity.set(direction).nor().scl(SPEED);
+        velocity.set(direction).scl(SPEED);
+
 
         body.setLinearVelocity(velocity.x, velocity.y);
         if (health <= 0 ) {
