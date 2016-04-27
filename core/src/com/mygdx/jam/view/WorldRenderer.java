@@ -4,8 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jam.G;
@@ -21,6 +24,7 @@ public class WorldRenderer {
     private OrthographicCamera cam;
     private Viewport viewport;
     private SpriteBatch batch;
+    private BitmapFont font;
 
 
     public static float SHAKE_TIME = 0;
@@ -36,6 +40,9 @@ public class WorldRenderer {
 
         // Batch used for
         batch = new SpriteBatch();
+
+        font = G.assets.get("fonts/universidad.fnt", BitmapFont.class);
+        font.setUseIntegerPositions(false);
     }
 
     public void render(float delta) {
@@ -68,6 +75,12 @@ public class WorldRenderer {
             gameWorld.getBox2DWorld().debugRender(cam);
         }
 
+        if (gameWorld.player != null) {
+            int score = gameWorld.player.coins;
+            batch.begin();
+            font.draw(batch, "Score: " + score, G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
+            batch.end();
+        }
         batch.setColor(Color.WHITE);
     }
 

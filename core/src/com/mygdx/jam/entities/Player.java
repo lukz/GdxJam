@@ -32,11 +32,11 @@ public class Player extends Entity implements PhysicsObject {
     private Sprite sprite;
     private Sprite spriteAttack;
     private Sprite healthSprite;
-    public int fire;
+    public boolean fire;
     private GameWorld gameWorld;
     public int coins;
 
-    float hp = 1;
+    public float hp = 1;
     private Color hpColor = new Color();
 
     public Player(float x, float y, float radius, GameWorld gameWorld) {
@@ -72,7 +72,7 @@ public class Player extends Entity implements PhysicsObject {
         fireEffect.draw(batch);
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         spriteAttack.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
-        if (fire > 0) {
+        if (fire) {
             spriteAttack.draw(batch);
         } else {
             sprite.draw(batch);
@@ -107,7 +107,8 @@ public class Player extends Entity implements PhysicsObject {
 
         body.setLinearVelocity(velocity.x, velocity.y);
         fireDelay-= delta;
-        if (fire > 0 && fireDelay <= 0) {
+        Gdx.app.log("", "fire " + fire);
+        if (fire && fireDelay <= 0) {
             fireEffect.start();
             fireDelay = 0.1f;
             Bullet bullet = new Bullet();
@@ -119,7 +120,7 @@ public class Player extends Entity implements PhysicsObject {
             bullet.init(pos.x, pos.y + .75f, 0, 5, gameWorld);
             bullet.body.setLinearDamping(.25f);
             bullet.alive = .8f;
-        } else if (fire <= 0){
+        } else if (!fire){
             fireEffect.allowCompletion();
         }
     }
