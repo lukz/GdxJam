@@ -51,6 +51,7 @@ public class WorldRenderer {
     }
 
     boolean left;
+    float restart;
     public void render(float delta) {
         if(SHAKE_TIME > 0) {
             SHAKE_TIME -= delta;
@@ -81,29 +82,33 @@ public class WorldRenderer {
             gameWorld.getBox2DWorld().debugRender(cam);
         }
 
-            int score = gameWorld.coins;
-            batch.begin();
-            font.draw(batch, Integer.toString(score), G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
-            if (coins.size > score) coins.clear();
-            if (coins.size < score) {
-                for (int i = 0; i < score - coins.size; i++) {
-                    Sprite sprite = new Sprite(texture);
-                    coins.add(sprite);
-                    sprite.setScale(0.5f);
-                    float ox = MathUtils.random(-48, 48);
-                    float oy = MathUtils.random(-32, 32);
-                    if (left) {
-                        sprite.setPosition(G.TARGET_WIDTH / 2 - 100 - sprite.getWidth()/2f + ox, 40 + oy);
-                    } else {
-                        sprite.setPosition(G.TARGET_WIDTH / 2 + 100 - sprite.getWidth()/2f + ox, 40 + oy);
-                    }
-                    left = !left;
+        int score = gameWorld.coins;
+        batch.begin();
+        font.draw(batch, Integer.toString(score), G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
+        if (coins.size > score) coins.clear();
+        if (coins.size < score) {
+            for (int i = 0; i < score - coins.size; i++) {
+                Sprite sprite = new Sprite(texture);
+                coins.add(sprite);
+                float ox = MathUtils.random(-48, 48);
+                float oy = MathUtils.random(-32, 32);
+                if (left) {
+                    sprite.setPosition(G.TARGET_WIDTH / 2 - 100 - sprite.getWidth()/2f + ox, 40 + oy);
+                } else {
+                    sprite.setPosition(G.TARGET_WIDTH / 2 + 100 - sprite.getWidth()/2f + ox, 40 + oy);
                 }
+                left = !left;
             }
-            for (Sprite sprite : coins) {
-                sprite.draw(batch);
-            }
-            batch.end();
+        }
+        for (Sprite sprite : coins) {
+            sprite.draw(batch);
+        }
+        if (gameWorld.player == null && gameWorld.player2 == null) {
+            restart += delta;
+            font.setColor(1, 1, 1, restart);
+            font.draw(batch, "<SPACE>", G.TARGET_WIDTH / 2, G.TARGET_HEIGHT / 2, 0, Align.center, false);
+        }
+        batch.end();
         batch.setColor(Color.WHITE);
     }
 
