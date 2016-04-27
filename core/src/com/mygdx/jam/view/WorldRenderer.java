@@ -89,6 +89,8 @@ public class WorldRenderer {
         if (coins.size < score) {
             for (int i = 0; i < score - coins.size; i++) {
                 Sprite sprite = new Sprite(texture);
+                sprite.setScale(0.6f);
+                sprite.setAlpha(0.6f);
                 coins.add(sprite);
                 float ox = MathUtils.random(-48, 48);
                 float oy = MathUtils.random(-32, 32);
