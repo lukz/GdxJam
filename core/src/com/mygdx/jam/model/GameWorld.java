@@ -21,6 +21,7 @@ public class GameWorld implements ContactListener {
 
     // Managers
     private EntityManager entityManager;
+    private BackgroundManager backgroundManager;
 
     public static enum GameState { WAITING_TO_START, IN_GAME, FINISH };
     private GameState gameState = GameState.WAITING_TO_START;
@@ -30,6 +31,7 @@ public class GameWorld implements ContactListener {
         box2DWorld = new Box2DWorld(new Vector2(0, Constants.GRAVITY));
 
         entityManager = new EntityManager();
+        backgroundManager = new BackgroundManager();
 
         // Pass all collisions through this class
         box2DWorld.getWorld().setContactListener(this);
@@ -63,11 +65,13 @@ public class GameWorld implements ContactListener {
         box2DWorld.update(delta);
 
         entityManager.update(delta);
+        backgroundManager.update(delta);
     }
 
 
     public void draw(SpriteBatch batch) {
         entityManager.draw(batch);
+        backgroundManager.draw(batch);
     }
 
     @Override
