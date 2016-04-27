@@ -75,12 +75,12 @@ public class WorldRenderer {
             gameWorld.getBox2DWorld().debugRender(cam);
         }
 
-        int score = gameWorld.player.coins;
-
-        batch.begin();
-        font.draw(batch, "Score: " + score, G.TARGET_WIDTH/2, 75, 0, Align.center, false);
-        batch.end();
-
+        if (gameWorld.player != null) {
+            int score = gameWorld.player.coins;
+            batch.begin();
+            font.draw(batch, "Score: " + score, G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
+            batch.end();
+        }
         batch.setColor(Color.WHITE);
     }
 

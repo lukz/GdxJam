@@ -1,6 +1,7 @@
 package com.mygdx.jam.model;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,9 +11,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.jam.G;
 import com.mygdx.jam.controllers.PlayerController;
-import com.mygdx.jam.entities.Enemy;
-import com.mygdx.jam.entities.Player;
-import com.mygdx.jam.entities.Wall;
+import com.mygdx.jam.entities.*;
 import com.mygdx.jam.utils.Constants;
 
 public class GameWorld implements ContactListener {
@@ -65,6 +64,20 @@ public class GameWorld implements ContactListener {
         entityManager.update(delta);
         backgroundManager.update(delta);
         enemyManager.update(delta);
+
+        if (player != null && player.hp <= 0) {
+            Vector2 position = player.getPosition();
+            new PlayerDead(position.x * Box2DWorld.BOX_TO_WORLD, position.y * Box2DWorld.BOX_TO_WORLD, 40, this);
+            new Effect(position.x * Box2DWorld.BOX_TO_WORLD, position.y * Box2DWorld.BOX_TO_WORLD, "blood.p", this);
+            entityManager.removeEntity(player);
+            player = null;
+            Gdx.input.setInputProcessor(null);
+        }
+        if (player == null && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
+            entityManager.addEntity(player);
+            Gdx.input.setInputProcessor(new PlayerController(player));
+        }
     }
 
 
