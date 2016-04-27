@@ -23,6 +23,7 @@ public class GameWorld implements ContactListener {
     private EntityManager entityManager;
     private BackgroundManager backgroundManager;
     private EnemyManager enemyManager;
+    public Player player;
 
     public static enum GameState { WAITING_TO_START, IN_GAME, FINISH };
     private GameState gameState = GameState.WAITING_TO_START;
@@ -44,7 +45,7 @@ public class GameWorld implements ContactListener {
 
     public void initializeObjects() {
         // Player
-        Player player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
+        player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
         entityManager.addEntity(player);
         Gdx.input.setInputProcessor(new PlayerController(player));
 
