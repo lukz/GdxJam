@@ -6,5 +6,5 @@ package com.mygdx.jam.utils;
 public class Constants {
 
     // No gravity here!
-    public static final float GRAVITY = -10;
+    public static final float GRAVITY = 0;
 }

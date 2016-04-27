@@ -4,7 +4,7 @@ import com.badlogic.gdx.Game;
 import com.mygdx.jam.utils.Assets;
 
 public class G {
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
     // Virtual resolution - potato units
     public static int TARGET_WIDTH = 1280;
