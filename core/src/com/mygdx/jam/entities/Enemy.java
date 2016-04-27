@@ -1,6 +1,7 @@
 package com.mygdx.jam.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -141,6 +142,8 @@ public class Enemy extends Entity implements PhysicsObject {
                     fireDelay = 3f;
 
                 }
+
+                G.assets.get("sounds/laser"+MathUtils.random(1,9)+".mp3", Sound.class).play(0.5f);
 
             }
 
