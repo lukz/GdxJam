@@ -1,8 +1,10 @@
 package com.mygdx.jam.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.jam.G;
 import com.mygdx.jam.entities.Enemy;
+import com.mygdx.jam.entities.Sheep;
 
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-04-27.
@@ -39,6 +41,9 @@ public class EnemyManager {
             timeToSpawn -= timeToSpawnDelta + MathUtils.random(-2f, 1f);
             timeLeftToSpawn = Math.max(0.2f, timeToSpawn);
 
+            if (MathUtils.random() > .66f) {
+                new Sheep(G.TARGET_WIDTH * MathUtils.random(0.1f, 0.9f), G.TARGET_HEIGHT + 100, gameWorld);
+            }
         }
 
         if(timeLeftToSpawn > 2 && gameWorld.getEntityManager().getEntitiesClass(Enemy.class).size == 0) {
