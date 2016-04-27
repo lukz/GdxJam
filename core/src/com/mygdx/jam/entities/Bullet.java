@@ -1,6 +1,7 @@
 package com.mygdx.jam.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -17,6 +18,7 @@ import com.mygdx.jam.model.PhysicsObject;
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
  */
 public class Bullet extends Entity implements PhysicsObject {
+    public enum BulletType {PLAYER, ENEMY}
     // Physics
     private Body body;
     private boolean flagForDelete = false;
@@ -28,8 +30,9 @@ public class Bullet extends Entity implements PhysicsObject {
     private Sprite sprite;
 
     private float alive;
-    private boolean active;
     private GameWorld gameWorld;
+    public BulletType type = BulletType.PLAYER;
+    public Color tint = new Color();
 
     public Bullet () {
         super(-1000, 0, 32, 32);
@@ -48,25 +51,26 @@ public class Bullet extends Entity implements PhysicsObject {
            .angularDamping(10f).linearDamping(5f).position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX).type(BodyDef.BodyType.DynamicBody).userData(this).build();
 
 
+
         sprite = new Sprite(new Texture(Gdx.files.internal("coin.png")));
         gameWorld.getEntityManager().addEntity(this);
         body.setActive(true);
         body.setTransform(x, y, 0);
         body.setLinearVelocity(vx, vy);
         alive = 0;
-        active = true;
+        sprite.setSize(bounds.width, bounds.height);
+
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        if (!active) return;
+        sprite.setColor(tint);
         sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
         sprite.draw(batch);
     }
 
     @Override
     public void update(float delta) {
-        if (!active) return;
         position.set(body.getPosition()).scl(Box2DWorld.BOX_TO_WORLD);
 
         velocity.set(direction).nor().scl(SPEED);
@@ -83,7 +87,7 @@ public class Bullet extends Entity implements PhysicsObject {
 
     @Override
     public void dispose() {
-
+        sprite.getTexture().dispose();
     }
 
     @Override
@@ -108,5 +112,9 @@ public class Bullet extends Entity implements PhysicsObject {
 
     public Vector2 getDirection() {
         return direction;
+    }
+
+    public void setBounds (float width, float height) {
+        bounds.setSize(width ,height);
     }
 }

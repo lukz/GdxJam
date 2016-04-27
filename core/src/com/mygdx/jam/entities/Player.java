@@ -1,6 +1,7 @@
 package com.mygdx.jam.entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -71,6 +72,9 @@ public class Player extends Entity implements PhysicsObject {
         if (fire > 0 && fireDelay <= 0) {
             fireDelay = 0.1f;
             Bullet bullet = new Bullet();
+            bullet.setBounds(48, 48);
+            bullet.type = Bullet.BulletType.PLAYER;
+            bullet.tint.set(Color.ORANGE);
             bullet.init(pos.x, pos.y + .75f, 0, 16, gameWorld);
         }
     }
@@ -81,7 +85,7 @@ public class Player extends Entity implements PhysicsObject {
 
     @Override
     public void dispose() {
-
+        sprite.getTexture().dispose();
     }
 
     @Override
