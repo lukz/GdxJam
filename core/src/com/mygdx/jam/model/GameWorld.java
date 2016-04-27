@@ -64,8 +64,8 @@ public class GameWorld implements ContactListener {
 
 
     public void draw(SpriteBatch batch) {
-        entityManager.draw(batch);
         backgroundManager.draw(batch);
+        entityManager.draw(batch);
     }
 
     @Override
