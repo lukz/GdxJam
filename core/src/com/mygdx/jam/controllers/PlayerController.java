@@ -35,6 +35,9 @@ public class PlayerController extends InputAdapter {
             case Input.Keys.S:
                 player.getDirection().y = -1;
                 return true;
+            case Input.Keys.SPACE:
+                player.fire++;
+                return true;
         }
         return false;
     }
@@ -57,6 +60,9 @@ public class PlayerController extends InputAdapter {
             case Input.Keys.DOWN:
             case Input.Keys.S:
                 if(player.getDirection().y == -1) player.getDirection().y = 0;
+                return true;
+            case Input.Keys.SPACE:
+                player.fire--;
                 return true;
         }
         return false;
