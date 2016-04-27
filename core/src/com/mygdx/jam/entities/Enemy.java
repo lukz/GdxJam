@@ -71,7 +71,7 @@ public class Enemy extends Entity implements PhysicsObject {
         fireDelay -= delta;
         if (fireDelay <= 0) {
             fireDelay = 1.5f;
-            Bullet bullet = Bullet.pool.obtain();
+            Bullet bullet = new Bullet();
             bullet.init(pos.x, pos.y - .75f, 0, -16, gameWorld);
         }
     }

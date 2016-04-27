@@ -70,7 +70,7 @@ public class Player extends Entity implements PhysicsObject {
         fireDelay-= delta;
         if (fire > 0 && fireDelay <= 0) {
             fireDelay = 0.1f;
-            Bullet bullet = Bullet.pool.obtain();
+            Bullet bullet = new Bullet();
             bullet.init(pos.x, pos.y + .75f, 0, 16, gameWorld);
         }
     }
