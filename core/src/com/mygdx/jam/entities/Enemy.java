@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -15,7 +16,7 @@ import com.mygdx.jam.model.PhysicsObject;
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
  */
-public class Player extends Entity implements PhysicsObject {
+public class Enemy extends Entity implements PhysicsObject {
 
 
     // Physics
@@ -30,7 +31,7 @@ public class Player extends Entity implements PhysicsObject {
     public int fire;
     private GameWorld gameWorld;
 
-    public Player(float x, float y, float radius, GameWorld gameWorld) {
+    public Enemy (float x, float y, float radius, GameWorld gameWorld) {
         super(x, y, radius * 2, radius * 2);
         this.gameWorld = gameWorld;
 
@@ -49,7 +50,7 @@ public class Player extends Entity implements PhysicsObject {
                 .userData(this)
                 .build();
 
-        sprite = new Sprite(new Texture(Gdx.files.internal("dragon.png")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("coin.png")));
     }
 
     @Override
@@ -58,7 +59,7 @@ public class Player extends Entity implements PhysicsObject {
         sprite.draw(batch);
     }
 
-    float fireDelay;
+    float fireDelay = MathUtils.random(1.5f);
     @Override
     public void update(float delta) {
         Vector2 pos = body.getPosition();
@@ -67,11 +68,11 @@ public class Player extends Entity implements PhysicsObject {
         velocity.set(direction).nor().scl(SPEED);
 
         body.setLinearVelocity(velocity.x, velocity.y);
-        fireDelay-= delta;
-        if (fire > 0 && fireDelay <= 0) {
-            fireDelay = 0.1f;
+        fireDelay -= delta;
+        if (fireDelay <= 0) {
+            fireDelay = 1.5f;
             Bullet bullet = Bullet.pool.obtain();
-            bullet.init(pos.x, pos.y + .75f, 0, 16, gameWorld);
+            bullet.init(pos.x, pos.y - .75f, 0, -16, gameWorld);
         }
     }
 
