@@ -1,15 +1,18 @@
 package com.mygdx.jam.entities;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.mygdx.jam.G;
 import com.mygdx.jam.model.Box2DWorld;
 import com.mygdx.jam.model.GameWorld;
 import com.mygdx.jam.model.PhysicsObject;
+import com.mygdx.jam.utils.Assets;
 
 /**
  * @author Lukasz Zmudziak, @lukz_dev on 2016-01-29.
@@ -71,6 +74,8 @@ public class Coin extends Entity implements PhysicsObject {
             new Effect(position.x, position.y, "coins.p", gameWorld);
             gameWorld.getEntityManager().removeEntity(this);
             gameWorld.coins += 1;
+
+            G.assets.get(Assets.Sounds.Coin, Sound.class).play(0.4f, 1 + MathUtils.random(-0.1f, 0.1f), 0);
         }
     }
 
