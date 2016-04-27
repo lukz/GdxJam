@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.jam.G;
 import com.mygdx.jam.controllers.PlayerController;
+import com.mygdx.jam.entities.Enemy;
 import com.mygdx.jam.entities.Player;
 import com.mygdx.jam.entities.Wall;
 import com.mygdx.jam.utils.Constants;
@@ -43,6 +44,11 @@ public class GameWorld implements ContactListener {
         entityManager.addEntity(player);
         Gdx.input.setInputProcessor(new PlayerController(player));
 
+
+        for (int i = -2; i < 3; i++) {
+            Enemy enemy = new Enemy(G.TARGET_WIDTH / 2f - i * 200, G.TARGET_HEIGHT - 100, 24, this);
+            entityManager.addEntity(enemy);
+        }
 
         // Walls
         new Wall(0, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
