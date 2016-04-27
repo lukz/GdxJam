@@ -51,8 +51,8 @@ public class Enemy extends Entity implements PhysicsObject {
                         .density(1f)
                         .friction(0.1f)
                         .restitution(0.5f)
-//                                .maskBits(Box2DWorld.WALKER_MASK)
-//                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
+                        .maskBits(Box2DWorld.ENEMY_MASK)
+                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
                         .build())
                 .fixedRotation()
                 .position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX)
@@ -80,7 +80,7 @@ public class Enemy extends Entity implements PhysicsObject {
             position.lerp(targetPosition, delta * SPEED / 2);
             body.setTransform(position.x * Box2DWorld.WORLD_TO_BOX, position.y * Box2DWorld.WORLD_TO_BOX, 0);
 
-            if(position.dst(targetPosition) < 20) {
+            if(position.dst(targetPosition) < 40) {
                 targetPositionReached = true;
             }
         } else {
