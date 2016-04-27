@@ -77,6 +77,7 @@ public class Player extends Entity implements PhysicsObject {
             batch.setShader(G.shader);
         }
         if (fire) {
+            spriteAttack.setColor(sprite.getColor());
             spriteAttack.draw(batch);
         } else {
             sprite.draw(batch);
