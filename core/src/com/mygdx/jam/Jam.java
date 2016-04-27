@@ -21,6 +21,7 @@ public class Jam extends Game {
 		G.assets.load("fire3.p", ParticleEffect.class);
 		G.assets.load("coins.p", ParticleEffect.class);
 		G.assets.load("blood.p", ParticleEffect.class);
+		G.assets.load("alien-death.p", ParticleEffect.class);
 		G.assets.load("coin.png", Texture.class);
 		G.assets.load("sheep.png", Texture.class);
 		G.assets.finishLoading();

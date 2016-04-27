@@ -27,7 +27,7 @@ public class Sheep extends Entity implements PhysicsObject {
     private GameWorld gameWorld;
 
     public Sheep (float x, float y, GameWorld gameWorld) {
-        super(x, y, 32, 32);
+        super(x, y, 48, 48);
         this.gameWorld = gameWorld;
         this.body = gameWorld.getBox2DWorld().getBodyBuilder().fixture(
            gameWorld.getBox2DWorld().getFixtureDefBuilder().circleShape(getBounds().getWidth() / 2 * Box2DWorld.WORLD_TO_BOX).density(1f).friction(0.2f).restitution(0.5f)
