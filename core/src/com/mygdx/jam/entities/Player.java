@@ -101,7 +101,7 @@ public class Player extends Entity implements PhysicsObject {
 //            bullet.tint.set(Color.ORANGE);
             bullet.tint.set(0, 0, 0, 0);
             bullet.damage = 10f;
-            bullet.init(pos.x, pos.y + .75f, 0, 6, gameWorld);
+            bullet.init(pos.x, pos.y + .75f, 0, 5, gameWorld);
             bullet.body.setLinearDamping(.25f);
             bullet.alive = .8f;
         } else if (fire <= 0){

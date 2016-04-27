@@ -31,7 +31,7 @@ public class EnemyManager {
         timeLeftToSpawn -= delta;
         if(timeLeftToSpawn < 0) {
 
-            for(int i = 0; i <= Math.max(1, (int)(time / 10f)); i++) {
+            for(int i = 0; i <= Math.max(1, (int)(time / 5f)); i++) {
                 Enemy enemy = new Enemy(G.TARGET_WIDTH * MathUtils.random(0.1f, 0.9f), G.TARGET_HEIGHT + 100, 24, gameWorld);
                 gameWorld.getEntityManager().addEntity(enemy);
             }
@@ -39,6 +39,10 @@ public class EnemyManager {
             timeToSpawn -= timeToSpawnDelta + MathUtils.random(-2f, 1f);
             timeLeftToSpawn = Math.max(0.2f, timeToSpawn);
 
+        }
+
+        if(timeLeftToSpawn > 2 && gameWorld.getEntityManager().getEntitiesClass(Enemy.class).size == 0) {
+            timeLeftToSpawn = 2;
         }
 
     }
