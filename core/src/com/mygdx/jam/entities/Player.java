@@ -106,7 +106,6 @@ public class Player extends Entity implements PhysicsObject {
 
         body.setLinearVelocity(velocity.x, velocity.y);
         fireDelay-= delta;
-        Gdx.app.log("", "fire " + fire);
         if (fire && fireDelay <= 0) {
             fireEffect.start();
             fireDelay = 0.1f;
