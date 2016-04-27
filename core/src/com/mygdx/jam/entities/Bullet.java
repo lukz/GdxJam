@@ -72,23 +72,26 @@ public class Bullet extends Entity implements PhysicsObject {
 
 
 
-        sprite = new Sprite(new Texture(Gdx.files.internal("coin.png")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("enemy/laserBlue04.png")));
         gameWorld.getEntityManager().addEntity(this);
         body.setActive(true);
         body.setTransform(x, y, 0);
         body.setLinearVelocity(vx, vy);
         alive = .5f;
-        sprite.setSize(bounds.width, bounds.height);
+//        sprite.setSize(bounds.width, bounds.height);
 
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        sprite.setColor(tint);
-        sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
-        sprite.draw(batch);
-        if (effect != null) {
-            effect.draw(batch);
+//        sprite.setColor(tint);
+
+        if(type == BulletType.ENEMY) {
+            sprite.setPosition(position.x - sprite.getWidth() / 2, position.y - sprite.getHeight() / 2);
+            sprite.draw(batch);
+            if (effect != null) {
+                effect.draw(batch);
+            }
         }
     }
 

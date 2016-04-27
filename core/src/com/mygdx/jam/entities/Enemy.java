@@ -60,7 +60,8 @@ public class Enemy extends Entity implements PhysicsObject {
                 .userData(this)
                 .build();
 
-        sprite = new Sprite(new Texture(Gdx.files.internal("coin.png")));
+        sprite = new Sprite(new Texture(Gdx.files.internal("enemy/enemy ("+ MathUtils.random(1, 20)+").png")));
+        sprite.setScale(0.7f);
     }
 
     @Override
