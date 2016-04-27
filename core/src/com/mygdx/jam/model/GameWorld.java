@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ai.GdxAI;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -23,6 +24,7 @@ public class GameWorld implements ContactListener {
     private BackgroundManager backgroundManager;
     private EnemyManager enemyManager;
     public Player player;
+    private PlayerDead dead;
 
     public static enum GameState { WAITING_TO_START, IN_GAME, FINISH };
     private GameState gameState = GameState.WAITING_TO_START;
@@ -67,13 +69,17 @@ public class GameWorld implements ContactListener {
 
         if (player != null && player.hp <= 0) {
             Vector2 position = player.getPosition();
-            new PlayerDead(position.x * Box2DWorld.BOX_TO_WORLD, position.y * Box2DWorld.BOX_TO_WORLD, 40, this);
-            new Effect(position.x * Box2DWorld.BOX_TO_WORLD, position.y * Box2DWorld.BOX_TO_WORLD, "blood.p", this);
+            entityManager.addEntity(dead = new PlayerDead(position.x, position.y, 40, this));
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
+            new Effect(position.x + MathUtils.random(-32, 32), position.y + MathUtils.random(-32, 32), "blood.p", this);
             entityManager.removeEntity(player);
             player = null;
             Gdx.input.setInputProcessor(null);
         }
         if (player == null && Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (dead != null) entityManager.removeEntity(dead);
             player = new Player(G.TARGET_WIDTH / 2f, 80, 40, this);
             entityManager.addEntity(player);
             Gdx.input.setInputProcessor(new PlayerController(player));

@@ -20,7 +20,6 @@ import com.mygdx.jam.model.PhysicsObject;
  */
 public class PlayerDead extends Entity {
 
-    private final ParticleEffect fireEffect;
     private Sprite sprite;
     private GameWorld gameWorld;
 
@@ -29,21 +28,21 @@ public class PlayerDead extends Entity {
         this.gameWorld = gameWorld;
 
         sprite = new Sprite(new Texture(Gdx.files.internal("dragon-dead.png")));
-
-        fireEffect = new ParticleEffect(G.assets.get("fire3.p", ParticleEffect.class));
-        fireEffect.setPosition(x, y);
-        fireEffect.reset();
+        sprite.setPosition(x - sprite.getWidth()/2, y - sprite.getHeight()/2);
     }
 
     @Override
     public void draw(SpriteBatch batch) {
-        fireEffect.draw(batch);
         sprite.draw(batch);
     }
 
+    float fade = 1;
     @Override
     public void update(float delta) {
-        fireEffect.update(delta);
+        fade -= delta * 0.5f;
+        if (fade >= 0) {
+            sprite.setColor(1, 1, 1, fade);
+        }
     }
 
     @Override public void drawDebug (ShapeRenderer shapeRenderer) {
