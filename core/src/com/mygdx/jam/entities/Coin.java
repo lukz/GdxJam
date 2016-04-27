@@ -30,8 +30,8 @@ public class Coin extends Entity implements PhysicsObject {
         this.gameWorld = gameWorld;
         this.body = gameWorld.getBox2DWorld().getBodyBuilder().fixture(
            gameWorld.getBox2DWorld().getFixtureDefBuilder().circleShape(getBounds().getWidth() / 2 * Box2DWorld.WORLD_TO_BOX).density(1f).friction(0.2f).restitution(0.5f)
-//                                .maskBits(Box2DWorld.WALKER_MASK)
-//                        .categoryBits(Box2DWorld.CATEGORY.ENEMY)
+                                .maskBits(Box2DWorld.COIN_MASK)
+                        .categoryBits(Box2DWorld.CATEGORY.COIN)
               .build())
 //                .fixedRotation()
            .angularDamping(10f).linearDamping(5f).position(x * Box2DWorld.WORLD_TO_BOX, y * Box2DWorld.WORLD_TO_BOX).type(BodyDef.BodyType.DynamicBody).userData(this).build();
