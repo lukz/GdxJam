@@ -2,6 +2,8 @@ package com.mygdx.jam.model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ai.GdxAI;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.mygdx.jam.G;
 import com.mygdx.jam.controllers.PlayerController;
+import com.mygdx.jam.controllers.PlayerGamepadController;
 import com.mygdx.jam.entities.Enemy;
 import com.mygdx.jam.entities.Player;
 import com.mygdx.jam.entities.Wall;
@@ -48,6 +51,9 @@ public class GameWorld implements ContactListener {
         entityManager.addEntity(player);
         Gdx.input.setInputProcessor(new PlayerController(player));
 
+        if(Controllers.getControllers().size == 1) {
+            Controllers.getControllers().get(0).addListener(new PlayerGamepadController(player));
+        }
 
         // Walls
         new Wall(0, G.TARGET_HEIGHT / 2, 20, G.TARGET_HEIGHT, this);
