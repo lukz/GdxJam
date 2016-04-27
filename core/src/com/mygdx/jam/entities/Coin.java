@@ -70,7 +70,7 @@ public class Coin extends Entity implements PhysicsObject {
             Player player = (Player)psycho2;
             new Effect(position.x, position.y, "coins.p", gameWorld);
             gameWorld.getEntityManager().removeEntity(this);
-            player.coins += 10;
+            player.coins += 1;
         }
     }
 

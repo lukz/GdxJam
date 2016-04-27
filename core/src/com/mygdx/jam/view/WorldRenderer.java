@@ -4,11 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jam.G;
@@ -19,13 +22,14 @@ import com.mygdx.jam.model.GameWorld;
  */
 public class WorldRenderer {
 
+    private final Texture texture;
     private GameWorld gameWorld;
 
     private OrthographicCamera cam;
     private Viewport viewport;
     private SpriteBatch batch;
     private BitmapFont font;
-
+    private Array<Sprite> coins = new Array<Sprite>();
 
     public static float SHAKE_TIME = 0;
 
@@ -43,8 +47,10 @@ public class WorldRenderer {
 
         font = G.assets.get("fonts/universidad.fnt", BitmapFont.class);
         font.setUseIntegerPositions(false);
+        texture = G.assets.get("coin.png", Texture.class);
     }
 
+    boolean left;
     public void render(float delta) {
         if(SHAKE_TIME > 0) {
             SHAKE_TIME -= delta;
@@ -78,7 +84,25 @@ public class WorldRenderer {
         if (gameWorld.player != null) {
             int score = gameWorld.player.coins;
             batch.begin();
-            font.draw(batch, "Score: " + score, G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
+            font.draw(batch, Integer.toString(score), G.TARGET_WIDTH / 2, 75, 0, Align.center, false);
+            if (coins.size > score) coins.clear();
+            if (coins.size < score) {
+                for (int i = 0; i < score - coins.size; i++) {
+                    Sprite sprite = new Sprite(texture);
+                    coins.add(sprite);
+                    float ox = MathUtils.random(-48, 48);
+                    float oy = MathUtils.random(-32, 32);
+                    if (left) {
+                        sprite.setPosition(G.TARGET_WIDTH / 2 - 100 - sprite.getWidth()/2f + ox, 40 + oy);
+                    } else {
+                        sprite.setPosition(G.TARGET_WIDTH / 2 + 100 - sprite.getWidth()/2f + ox, 40 + oy);
+                    }
+                    left = !left;
+                }
+            }
+            for (Sprite sprite : coins) {
+                sprite.draw(batch);
+            }
             batch.end();
         }
         batch.setColor(Color.WHITE);
